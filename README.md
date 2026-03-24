@@ -170,5 +170,5 @@ A: Check the relevant log file in the `logs/` directory or the console output; e
 If you use DropCode in your research, please cite this repository:
 
 ```
-DropCode: a pipeline for gene editing site variation detection. https://github.com/yourusername/DropCode
+DropCode: a pipeline for gene editing site variation detection.  https://github.com/qixiantao/Chuanxiao_Xie_DropCode_Linux.git
 ```
