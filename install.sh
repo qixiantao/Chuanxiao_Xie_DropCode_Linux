@@ -101,7 +101,6 @@ python -c "import vcfpy; print('vcfpy OK')" || { echo "vcfpy installation failed
 echo "Downloading Picard JAR and demo data..."
 
 # Picard JAR
-mkdir -p src
 if [ ! -f "src/picard.jar" ]; then
     echo "Downloading Picard JAR..."
     wget -O src/picard.jar https://github.com/qixiantao/Chuanxiao_Xie_DropCode_Linux/releases/download/DropCode_picard.jar/picard.jar || {
@@ -116,7 +115,6 @@ fi
 
 # Demo data
 DEMO_DIR="input_file/DEMO"
-mkdir -p "$DEMO_DIR"
 if [ ! -f "$DEMO_DIR/202603091635_AE01-250302016_4P251123103US293267A2_A_20260309_MWBMWB0309_L02_R1.fq.gz" ]; then
     echo "Downloading demo forward reads..."
     wget -O "$DEMO_DIR/202603091635_AE01-250302016_4P251123103US293267A2_A_20260309_MWBMWB0309_L02_R1.fq.gz" \
