@@ -29,7 +29,7 @@ DropCode is an automated analysis pipeline for next-generation sequencing (NGS) 
 
 1. **Clone the repository**
    ```bash
-   git clone [https://github.com/qixiantao/Chuanxiao_Xie_DropCode_Linux.git]
+   git clone https://github.com/qixiantao/Chuanxiao_Xie_DropCode_Linux.git
    cd /Chuanxiao_Xie_DropCode_Linux/DropCode
    ```
 
