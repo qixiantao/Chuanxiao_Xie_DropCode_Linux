@@ -31,6 +31,12 @@ DropCode is an automated analysis pipeline for next-generation sequencing (NGS) 
    ```bash
    git clone https://github.com/qixiantao/Chuanxiao_Xie_DropCode_Linux.git
    cd Chuanxiao_Xie_DropCode_Linux
+   wget -O src/picard.jar https://github.com/broadinstitute/picard/releases/download/2.27.5/picard.jar
+   #or
+   wget -O src/picard.jar https://github.com/qixiantao/Chuanxiao_Xie_DropCode_Linux/releases/download/DropCode_picard.jar/picard.jar
+   # demo data(optional)
+   wget -O input_file/DEMO/202603091635_AE01-250302016_4P251123103US293267A2_A_20260309_MWBMWB0309_L02_R1.fq.gz https://github.com/qixiantao/Chuanxiao_Xie_DropCode_Linux/releases/download/DropCode_picard.jar/202603091635_AE01-250302016_4P251123103US293267A2_A_20260309_MWBMWB0309_L02_R1.fq.gz
+   wget -O input_file/DEMO/202603091635_AE01-250302016_4P251123103US293267A2_A_20260309_MWBMWB0309_L02_R2.fq.gz https://github.com/qixiantao/Chuanxiao_Xie_DropCode_Linux/releases/download/DropCode_picard.jar/202603091635_AE01-250302016_4P251123103US293267A2_A_20260309_MWBMWB0309_L02_R2.fq.gz
    ```
 
 2. **Run the installation script**
