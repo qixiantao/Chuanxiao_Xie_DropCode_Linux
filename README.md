@@ -70,10 +70,10 @@ Place each sample's data in a separate subfolder under `input_file` (the folder 
 - **`reference.fasta`**: Reference genome sequence (single contig containing the target region).
 - **`target.fasta`**: Target editing site sequence (single sequence; the script extracts its upstream/downstream region).
 - **`barcode.xlsx`**: Barcode information. Format (first row is header):
-  | Sample | Index1 | Index2 |
-  |--------|--------|--------|
-  | A      | ATCG   | GCTA   |
-  | B      | CGAT   | TAGC   |
+  | Sample |     Index1   |    Index2    |
+  |--------|--------------|--------------|
+  | A      | ATCG(10nt)   | GCTA(10nt)   |
+  | B      | CGAT(10nt)   | TAGC(10nt)   |
 - **`library.xlsx`** (optional): Mapping from sample names to passwords, used to replace names in `barcode.xlsx` with passwords. Format:
   | Name | Password |
   |------|----------|
@@ -132,14 +132,14 @@ bash run_sample.sh --name test --input ./input_file/test --output ./output_file/
 
 For each sample, the directory `output_file/<sample_name>/` contains:
 
-- **`BAM/`**: Aligned BAM files (`*.sorted.bam`) and indices (`*.bai`).
+- **`BAM/`**: Aligned BAM files (`*.sorted.bam`) and indices (`*.bai`).per-sample mutation summaries together with IGV-compatible BAM files for base-resolution visualization(https://igv.org/doc/desktop/#DownloadPage/).
 - **`GEAnalysis_result.xlsx`**: Excel file with allele frequency statistics. The top 5 alleles and their percentages are listed.
 
 Example Excel content:
 
 | Sample | Allele1_Seq_Percent | Allele2_Seq_Percent | ... |
 |--------|---------------------|---------------------|-----|
-| test   | A: 85.23%           | C: 12.45%           | ... |
+| test   | AAATTTCCCGGG: 85.23%|AAATTTGCCGGG: 12.45% | ... |
 
 ## Logs
 
