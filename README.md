@@ -121,12 +121,12 @@ Results for each sample will be saved under `output_file/<sample_name>/`.
 ### Process a single sample
 
 ```bash
-bash run_sample.sh --name SAMPLE_NAME --input SAMPLE_DIR --output OUTPUT_DIR [--t THREADS] [--ram RAM_GB] [--q QUALITY]
+bash run_sample.sh --name SAMPLE_NAME --input SAMPLE_DIR --output OUTPUT_DIR --t [THREADS] --ram [RAM_GB] --q [QUALITY]
 ```
 
 Example:
 ```bash
-bash run_sample.sh --name test --input ./input_file/test --output ./output_file/test --t 8 --ram 4 --q 20
+bash run_sample.sh --name DEMO --input ./input_file/DEMO --output ./output_file/DEMO --t 8 --ram 4 --q 20
 ```
 
 ## Output
