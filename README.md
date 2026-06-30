@@ -55,11 +55,12 @@ DropCode is an automated analysis pipeline for next-generation sequencing (NGS) 
 3. **Verify the installation**
    ```bash
    conda activate dropcode
-   bwa --version
+   bwa
    samtools --version
    fastp --version
    bcftools --version
    java -version
+   
    ```
 
 ## Input File Preparation
