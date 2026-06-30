@@ -22,7 +22,7 @@ DropCode is an automated analysis pipeline for next-generation sequencing (NGS) 
   - `samtools`
   - `fastp`
   - `bcftools`
-  - `java` (for Picard)
+  - `java (17.x.x)` (for Picard)
 - Conda (Miniconda or Anaconda) for environment management
 
 ## Installation
