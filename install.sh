@@ -28,7 +28,7 @@ conda install -y -c conda-forge openjdk=11
 
 echo "Installing Python dependencies..."
 pip install --upgrade pip
-pip install pandas openpyxl biopython vcfpy
+conda install -y -c conda-forge pandas openpyxl biopython vcfpy
 
 # Verify Python packages
 echo "Verifying Python packages..."
