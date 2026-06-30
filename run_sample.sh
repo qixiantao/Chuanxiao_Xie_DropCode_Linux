@@ -11,7 +11,7 @@ source "$CONDA_BASE/etc/profile.d/conda.sh"
 conda activate dropcode || { echo "Failed to activate dropcode environment"; exit 1; }
 
 # Ensure library path is set (avoid missing libcrypto issues)
-export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:${LD_LIBRARY_PATH:-}
 
 # Default values
 THREADS=1
