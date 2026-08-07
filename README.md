@@ -107,9 +107,9 @@ Options:
 - `--ram`: Total memory in GB for sorting (default: 1)
 - `--q`: Quality threshold for fastp and mpileup (10/20/30, default: 20)
 - `--f`: Allele frequency filter threshold in percent (integer from 0 to 20, default: 0).
--        0 means no filtering
--        eles with frequency below this threshold will not be shown in the final Excel report
--        Retained allele frequencies will be recalculated based on the total reads remaining after filtering
+        0 means no filtering
+        eles with frequency below this threshold will not be shown in the final Excel report
+        Retained allele frequencies will be recalculated based on the total reads remaining after filtering
 - `--input`: Input folder path (default: `./input_file`)
 - `--output`: Output folder path (default: `./output_file`)
 
