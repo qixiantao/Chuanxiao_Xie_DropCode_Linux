@@ -15,7 +15,7 @@ DropCode is an automated analysis pipeline for next-generation sequencing (NGS) 
 
 ## System Requirements
 
-- Linux (Ubuntu 18.04+ recommended)
+- Linux/WSL1/WSL2 (Ubuntu 22.04 recommended)
 - Python 3.6+
 - The following tools must be available in `PATH`:
   - `bwa`
