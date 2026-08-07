@@ -101,19 +101,23 @@ input_file/
 ### Process all samples in batch
 
 ```bash
-bash batch_run.sh [--t THREADS] [--ram RAM_GB] [--q QUALITY] [--input INPUT_DIR] [--output OUTPUT_DIR]
+bash batch_run.sh [--t THREADS] [--ram RAM_GB] [--q QUALITY] [--f FILTER_PERCENT] [--input INPUT_DIR] [--output OUTPUT_DIR]
 ```
 
 Options:
 - `--t`: Number of CPU threads (default: 1)
 - `--ram`: Total memory in GB for sorting (default: 1)
 - `--q`: Quality threshold for fastp and mpileup (10/20/30, default: 20)
+- `--f`: Allele frequency filter threshold in percent (integer from 0 to 20, default: 0).
+-        0 means no filtering
+-        eles with frequency below this threshold will not be shown in the final Excel report
+-        Retained allele frequencies will be recalculated based on the total reads remaining after filtering
 - `--input`: Input folder path (default: `./input_file`)
 - `--output`: Output folder path (default: `./output_file`)
 
 Example:
 ```bash
-bash batch_run.sh --t 8 --ram 4 --q 20
+bash batch_run.sh --t 8 --ram 4 --q 20 --f 5 --input ./input_file  --output ./output_file
 ```
 
 Results for each sample will be saved under `output_file/<sample_name>/`.
@@ -121,12 +125,12 @@ Results for each sample will be saved under `output_file/<sample_name>/`.
 ### Process a single sample
 
 ```bash
-bash run_sample.sh --name SAMPLE_NAME --input SAMPLE_DIR --output OUTPUT_DIR --t [THREADS] --ram [RAM_GB] --q [QUALITY]
+bash run_sample.sh --name SAMPLE_NAME --input SAMPLE_DIR --output OUTPUT_DIR --t [THREADS] --ram [RAM_GB] --q [QUALITY] [--f FILTER_PERCENT]
 ```
 
 Example:
 ```bash
-bash run_sample.sh --name DEMO --input ./input_file/DEMO --output ./output_file/DEMO --t 8 --ram 4 --q 20
+bash run_sample.sh --name DEMO --input ./input_file/DEMO --output ./output_file/DEMO --t 8 --ram 4 --q 20 --f 5
 ```
 
 ## Output
@@ -137,10 +141,8 @@ For each sample, the directory `output_file/<sample_name>/` contains:
 - **`GEAnalysis_result.xlsx`**: Excel file with allele frequency statistics. The top 5 alleles and their percentages are listed.
 
 Example Excel content:
+<img width="1757" height="1062" alt="image" src="https://github.com/user-attachments/assets/6e8b416a-cb7e-476c-8a41-ad80ba6cf156" />
 
-| Sample | Allele1_Seq_Percent | Allele2_Seq_Percent | ... |
-|--------|---------------------|---------------------|-----|
-| test   | AAATTTCCCGGG: 85.23%|AAATTTGCCGGG: 12.45% | ... |
 
 ## Logs
 
@@ -177,5 +179,5 @@ A: Check the relevant log file in the `logs/` directory or the console output; e
 If you use DropCode in your research, please cite this repository:
 
 ```
-DropCode: a pipeline for gene editing site variation detection.  https://github.com/qixiantao/Chuanxiao_Xie_DropCode_Linux.git
+DECODER enables single-reaction, massively multiplexed profiling of CRISPR editing outcomes.  https://github.com/qixiantao/Chuanxiao_Xie_DropCode_Linux.git
 ```
