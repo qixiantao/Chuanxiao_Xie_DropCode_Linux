@@ -15,14 +15,14 @@ DropCode is an automated analysis pipeline for next-generation sequencing (NGS) 
 
 ## System Requirements
 
-- Linux/WSL1/WSL2 (Ubuntu 22.04 recommended)
+- Linux (Ubuntu 18.04+ recommended)
 - Python 3.6+
 - The following tools must be available in `PATH`:
   - `bwa`
   - `samtools`
   - `fastp`
   - `bcftools`
-  - `java (17.x.x)` (for Picard)
+  - `java` (for Picard)
 - Conda (Miniconda or Anaconda) for environment management
 
 ## Installation
@@ -31,10 +31,6 @@ DropCode is an automated analysis pipeline for next-generation sequencing (NGS) 
    ```bash
    git clone https://github.com/qixiantao/Chuanxiao_Xie_DropCode_Linux.git
    cd Chuanxiao_Xie_DropCode_Linux
-   wget -O src/picard.jar https://github.com/qixiantao/Chuanxiao_Xie_DropCode_Linux/releases/download/DropCode_picard.jar/picard.jar
-   # demo data(optional)
-   wget -O input_file/DEMO/202603091635_AE01-250302016_4P251123103US293267A2_A_20260309_MWBMWB0309_L02_R1.fq.gz https://github.com/qixiantao/Chuanxiao_Xie_DropCode_Linux/releases/download/DropCode_picard.jar/202603091635_AE01-250302016_4P251123103US293267A2_A_20260309_MWBMWB0309_L02_R1.fq.gz
-   wget -O input_file/DEMO/202603091635_AE01-250302016_4P251123103US293267A2_A_20260309_MWBMWB0309_L02_R2.fq.gz https://github.com/qixiantao/Chuanxiao_Xie_DropCode_Linux/releases/download/DropCode_picard.jar/202603091635_AE01-250302016_4P251123103US293267A2_A_20260309_MWBMWB0309_L02_R2.fq.gz
    ```
 
 2. **Run the installation script**
@@ -53,12 +49,11 @@ DropCode is an automated analysis pipeline for next-generation sequencing (NGS) 
 3. **Verify the installation**
    ```bash
    conda activate dropcode
-   bwa
+   bwa --version
    samtools --version
    fastp --version
    bcftools --version
    java -version
-   
    ```
 
 ## Input File Preparation
@@ -69,10 +64,10 @@ Place each sample's data in a separate subfolder under `input_file` (the folder 
 - **`reference.fasta`**: Reference genome sequence (single contig containing the target region).
 - **`target.fasta`**: Target editing site sequence (single sequence; the script extracts its upstream/downstream region).
 - **`barcode.xlsx`**: Barcode information. Format (first row is header):
-  | Sample |     Index1   |    Index2    |
-  |--------|--------------|--------------|
-  | A      | ATCG(10nt)   | GCTA(10nt)   |
-  | B      | CGAT(10nt)   | TAGC(10nt)   |
+  | Sample | Index1 | Index2 |
+  |--------|--------|--------|
+  | A      | ATCG   | GCTA   |
+  | B      | CGAT   | TAGC   |
 - **`library.xlsx`** (optional): Mapping from sample names to passwords, used to replace names in `barcode.xlsx` with passwords. Format:
   | Name | Password |
   |------|----------|
@@ -99,23 +94,22 @@ input_file/
 ### Process all samples in batch
 
 ```bash
-bash batch_run.sh [--t THREADS] [--ram RAM_GB] [--q QUALITY] [--f FILTER_PERCENT] [--input INPUT_DIR] [--output OUTPUT_DIR]
+bash batch_run.sh [--t THREADS] [--ram RAM_GB] [--q QUALITY] [--f FILTER_FREQ] [--l TARGET_LEN] [--res N_READS] [--input INPUT_DIR] [--output OUTPUT_DIR]
 ```
 
 Options:
 - `--t`: Number of CPU threads (default: 1)
 - `--ram`: Total memory in GB for sorting (default: 1)
 - `--q`: Quality threshold for fastp and mpileup (10/20/30, default: 20)
-- `--f`: Allele frequency filter threshold in percent (integer from 0 to 20, default: 0).
-       - `0 means no filtering`
-       - `eles with frequency below this threshold will not be shown in the final Excel report`
-       - `Retained allele frequencies will be recalculated based on the total reads remaining after filtering`
+- `--f`: Allele-frequency filter threshold in percent, 0-20 (default: 0)
+- `--l`: Total length of the reported target region, centered on the target with symmetric flanking (optional; default = exact target length)
+- `--res`: Number of top allele/read sequences to export, ordered by read count (default: 5)
 - `--input`: Input folder path (default: `./input_file`)
 - `--output`: Output folder path (default: `./output_file`)
 
 Example:
 ```bash
-bash batch_run.sh --t 8 --ram 4 --q 20 --f 5 --input ./input_file  --output ./output_file
+bash batch_run.sh --t 8 --ram 4 --q 20 --l 60 --res 50
 ```
 
 Results for each sample will be saved under `output_file/<sample_name>/`.
@@ -123,24 +117,35 @@ Results for each sample will be saved under `output_file/<sample_name>/`.
 ### Process a single sample
 
 ```bash
-bash run_sample.sh --name SAMPLE_NAME --input SAMPLE_DIR --output OUTPUT_DIR --t [THREADS] --ram [RAM_GB] --q [QUALITY] [--f FILTER_PERCENT]
+bash run_sample.sh --name SAMPLE_NAME --input SAMPLE_DIR --output OUTPUT_DIR [--t THREADS] [--ram RAM_GB] [--q QUALITY] [--f FILTER_FREQ] [--l TARGET_LEN] [--res N_READS]
 ```
 
 Example:
 ```bash
-bash run_sample.sh --name DEMO --input ./input_file/DEMO --output ./output_file/DEMO --t 8 --ram 4 --q 20 --f 5
+bash run_sample.sh --name test --input ./input_file/test --output ./output_file/test --t 8 --ram 4 --q 20 --l 60 --res 50
 ```
+
+### Target region length (`--l`)
+
+By default the reported target equals the `target.fasta` sequence (no flanking). With `--l N`, the region is centered on the target and extended symmetrically on both sides. For example, a 20 bp target with `--l 60` reports a 60 bp region (20 bp flanking added to each side). `--l` must be at least as long as the target; the exact target length is used if omitted.
+
+### Exporting reads (`--res`)
+
+`--res N` exports the top `N` distinct allele/read sequences (ordered by read count). If fewer than `N` distinct alleles exist, all are exported. This controls both the number of `Allele*` columns in the Excel report and the entries in the accompanying `_top_reads.fa` file.
 
 ## Output
 
 For each sample, the directory `output_file/<sample_name>/` contains:
 
-- **`BAM/`**: Aligned BAM files (`*.sorted.bam`) and indices (`*.bai`).per-sample mutation summaries together with IGV-compatible BAM files for base-resolution visualization(https://igv.org/doc/desktop/#DownloadPage/).
-- **`GEAnalysis_result.xlsx`**: Excel file with allele frequency statistics. The top 5 alleles and their percentages are listed.
+- **`BAM/`**: Aligned BAM files (`*.sorted.bam`) and indices (`*.bai`).
+- **`GEAnalysis_result.xlsx`**: Excel file with allele frequency statistics. The top alleles and their percentages are listed (the number of `Allele*` columns follows `--res`).
+- **`GEAnalysis_result_top_reads.fa`**: FASTA file with the top `N` read sequences per sample (rank, read count, percentage, and mutation type in the header).
 
 Example Excel content:
-<img width="1757" height="1062" alt="image" src="https://github.com/user-attachments/assets/6e8b416a-cb7e-476c-8a41-ad80ba6cf156" />
 
+| Sample | Allele1_Seq_Percent | Allele2_Seq_Percent | ... |
+|--------|---------------------|---------------------|-----|
+| test   | A: 85.23%           | C: 12.45%           | ... |
 
 ## Logs
 
@@ -177,5 +182,5 @@ A: Check the relevant log file in the `logs/` directory or the console output; e
 If you use DropCode in your research, please cite this repository:
 
 ```
-DECODER enables single-reaction, massively multiplexed profiling of CRISPR editing outcomes.  https://github.com/qixiantao/Chuanxiao_Xie_DropCode_Linux.git
+DropCode: a pipeline for gene editing site variation detection.  https://github.com/qixiantao/Chuanxiao_Xie_DropCode_Linux.git
 ```
